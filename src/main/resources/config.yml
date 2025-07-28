@@ -1,0 +1,7 @@
+app:
+  storage:
+    imageRoot: "/Users/wiily/Personal Projects/Orders/PS Cosmeticos/PsAPI/src/main/resources/images"
+  api:
+    version: "v2"
+    externalServiceUrl: "https://exemplo.com"
+    baseIp: "192.168.0.1"
