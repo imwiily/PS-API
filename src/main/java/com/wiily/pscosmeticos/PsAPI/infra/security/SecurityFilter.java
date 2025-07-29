@@ -24,7 +24,6 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        System.out.println("Filtro ativado!");
         var tokenJWT = getToken(request);
 
         if (tokenJWT != null) {
@@ -33,16 +32,13 @@ public class SecurityFilter extends OncePerRequestFilter {
 
             var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            System.out.println("Usuario autenticado.");
         }
-        System.out.println("pulando para proximo filtro");
         filterChain.doFilter(request, response);
     }
 
     private String getToken(HttpServletRequest request) {
         var authorizationHeader = request.getHeader("Authorization");
         if (authorizationHeader != null) {
-            System.out.println("Token válido");
             return authorizationHeader.replace("Bearer ", "");
         }
         return null;

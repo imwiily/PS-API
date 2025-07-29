@@ -22,12 +22,12 @@ public class SecurityConfigurations {
     SecurityFilter securityFilter;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        System.out.println("Filtro chamado!");
         return http.csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(req -> {
                     req.requestMatchers("/api/login").permitAll();
                     req.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
+                    req.requestMatchers(HttpMethod.GET).permitAll();
                     req.anyRequest().authenticated();
                 })
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
