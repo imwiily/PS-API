@@ -18,6 +18,7 @@ public class AppProperties {
     @Getter
     public static class Storage {
         private String imageRoot;
+        private String imageProductRoot;
         private String imageCategoryRoot;
 
     }

@@ -1,6 +1,7 @@
 package com.wiily.pscosmeticos.PsAPI.service;
 
 import com.wiily.pscosmeticos.PsAPI.domain.category.Category;
+import com.wiily.pscosmeticos.PsAPI.domain.product.Product;
 import com.wiily.pscosmeticos.PsAPI.infra.config.AppProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,8 +38,12 @@ public class ImageService {
         List<String> list = new ArrayList<>();
         switch (object) {
             case Category c -> {
-                list.add(c.getNome());
+                list.add(c.getSlug());
                 list.add(properties.getStorage().getImageCategoryRoot());
+            }
+            case Product p -> {
+                list.add(p.getSlug());
+                list.add(properties.getStorage().getImageProductRoot());
             }
             default -> throw new IllegalStateException("Unexpected value: " + object);
         }

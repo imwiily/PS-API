@@ -1,6 +1,6 @@
 package com.wiily.pscosmeticos.PsAPI.domain.category;
 
-import com.wiily.pscosmeticos.PsAPI.infra.config.AppProperties;
+import com.wiily.pscosmeticos.PsAPI.domain.product.Product;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -8,10 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
-import java.util.Map;
 
 @Entity
 @Table(name = "categories")
@@ -36,6 +34,9 @@ public class Category {
 
     @Column(name = "category_image_url")
     String imageUrl;
+
+    @OneToMany(mappedBy = "category")
+    List<Product> products;
 
     @Column(name = "category_total_products")
     int totalProdutos;

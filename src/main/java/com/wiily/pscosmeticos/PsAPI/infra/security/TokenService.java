@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 @Service
@@ -17,6 +19,7 @@ public class TokenService {
     public String genToken(User user) {
         try {
             var algorithm = Algorithm.HMAC256("123456");
+            System.out.println(Instant.now().plus(2, ChronoUnit.HOURS));
             return JWT.create()
                     .withIssuer("API PS")
                     .withSubject(user.getUsername())
@@ -28,7 +31,7 @@ public class TokenService {
     }
 
     private Instant expireDate() {
-        return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
+        return Instant.now().plus(2, ChronoUnit.HOURS);
     }
 
     public String getSubject(String tokenJWT) {
@@ -40,7 +43,7 @@ public class TokenService {
                     .verify(tokenJWT)
                     .getSubject();
         } catch (JWTVerificationException e) {
-            throw new RuntimeException("Invalid token");
+            throw new RuntimeException(e);
         }
 
     }

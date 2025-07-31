@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/image/")
@@ -20,8 +23,8 @@ public class ImageController {
 
     @GetMapping("{name}")
     public ResponseEntity<byte[]> viewImage(@PathVariable String name) throws IOException {
-        File image = new File(properties.getStorage().getImageCategoryRoot() + name);
-        System.out.println(image.toPath());
+        String filePath = findFile(name, properties.getStorage().getImageRoot());
+        File image = new File(filePath);
         if (!image.exists()) {
             return ResponseEntity.notFound().build();
         }
@@ -31,5 +34,17 @@ public class ImageController {
                 .header("Content-Type", Files.probeContentType(image.toPath()))
                 .header("Content-Disposition", "inline; filename=\"" + name + "\"")
                 .body(content);
+    }
+
+    public String findFile(String fileName, String rootPath) {
+        try {
+            Optional<Path> result = Files.walk(Paths.get(rootPath))
+                    .filter(Files::isRegularFile)
+                    .filter(path -> path.getFileName().toString().equals(fileName))
+                    .findFirst();
+            return result.map(path -> path.toAbsolutePath().toString()).orElse(null);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
