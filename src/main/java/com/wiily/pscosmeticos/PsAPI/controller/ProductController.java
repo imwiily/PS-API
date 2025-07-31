@@ -5,7 +5,6 @@ import com.wiily.pscosmeticos.PsAPI.domain.product.ProductRepository;
 import com.wiily.pscosmeticos.PsAPI.domain.product.ReturnProductCreationData;
 import com.wiily.pscosmeticos.PsAPI.domain.returns.ApiResponse;
 import com.wiily.pscosmeticos.PsAPI.service.ImageService;
-import com.wiily.pscosmeticos.PsAPI.service.IngredientService;
 import com.wiily.pscosmeticos.PsAPI.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
