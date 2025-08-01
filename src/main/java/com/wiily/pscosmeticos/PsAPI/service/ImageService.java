@@ -20,6 +20,7 @@ public class ImageService {
     AppProperties properties;
 
     // Saves and return the image URL.
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public String imageProcessor(MultipartFile image, Object object) {
         var objectInfo = objectType(object);
         var fileLocation = objectInfo.getLast();
@@ -53,6 +54,9 @@ public class ImageService {
     public String getImagePath(Category category) {
         String[] url = category.getImageUrl().split("/");
         return url[4];
-
+    }
+    public String getImagePath(Product product) {
+        String[] url = product.getImage().split("/");
+        return url[4];
     }
 }

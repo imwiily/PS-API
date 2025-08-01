@@ -32,6 +32,8 @@ CREATE TABLE products (
     product_complete_description VARCHAR(3000) NOT NULL,
     product_how_to_use VARCHAR(3000) NOT NULL,
     product_active BOOL NOT NULL,
+    product_create_at TIMESTAMP,
+    product_update_at TIMESTAMP,
     FOREIGN KEY (product_category) REFERENCES categories(category_id)
 );
 CREATE TABLE tags (

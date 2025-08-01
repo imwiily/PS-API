@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 @Entity
@@ -69,6 +71,19 @@ public class Product {
     @Column(name = "product_active")
     boolean active;
 
+    @Column(name = "product_create_at")
+    LocalDateTime createdTime;
+
+    @Column(name = "product_update_at")
+    LocalDateTime updateTime;
+
+    @Transient
+    ZoneId zone = ZoneId.of("America/Sao_Paulo");
+
+    public boolean getActive() {
+        return active;
+    }
+
     public Product(CreateProductData data) {
         name = data.nome();
         slug = data.nome().replace(" ", "-").toLowerCase();
@@ -78,5 +93,7 @@ public class Product {
         completeDescription = data.descricaoCompleta();
         howToUse = data.modoUso();
         active = data.ativo();
+        createdTime = LocalDateTime.now(zone);
     }
+
 }
