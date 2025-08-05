@@ -14,7 +14,8 @@ target/
 .sts4-cache
 
 ### IMG ###
-src/main/resources/images/**
+src/main/resources/images/category
+src/main/resources/images/products
 
 ### IntelliJ IDEA ###
 .idea
