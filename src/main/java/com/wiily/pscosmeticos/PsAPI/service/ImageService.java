@@ -1,6 +1,7 @@
 package com.wiily.pscosmeticos.PsAPI.service;
 
 import com.wiily.pscosmeticos.PsAPI.domain.category.Category;
+import com.wiily.pscosmeticos.PsAPI.domain.exception.ImageIsNull;
 import com.wiily.pscosmeticos.PsAPI.domain.product.Product;
 import com.wiily.pscosmeticos.PsAPI.infra.config.AppProperties;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ public class ImageService {
     // Saves and return the image URL.
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public String imageProcessor(MultipartFile image, Object object) {
+        if (image.isEmpty()) throw new ImageIsNull("The image sent to the API doesn't exist");
         var objectInfo = objectType(object);
         var fileLocation = objectInfo.getLast();
         try {

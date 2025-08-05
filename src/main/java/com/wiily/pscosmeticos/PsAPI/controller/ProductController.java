@@ -2,7 +2,6 @@ package com.wiily.pscosmeticos.PsAPI.controller;
 
 import com.wiily.pscosmeticos.PsAPI.domain.product.*;
 import com.wiily.pscosmeticos.PsAPI.domain.returns.ApiResponse;
-import com.wiily.pscosmeticos.PsAPI.service.ImageService;
 import com.wiily.pscosmeticos.PsAPI.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,11 +16,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 
 @RestController
-@RequestMapping("/api/v1/products")
+@RequestMapping("/api/v1/produtos")
 public class ProductController {
 
-    @Autowired
-    ImageService imageService;
     @Autowired
     ProductService service;
     @Autowired
@@ -33,12 +30,7 @@ public class ProductController {
     public ResponseEntity<ApiResponse> createProduct(@RequestPart(name = "dados") CreateProductData data,
                                                 @RequestPart(name = "imagem") MultipartFile image,
                                                 UriComponentsBuilder uriBuilder) {
-        var product = service.createProduct(data);
-        if (product == null) {
-            return ResponseEntity.badRequest().body(new ApiResponse(false, "Category with id: '" + data.categoria() + "' do not exists!"));
-        }
-        var img = imageService.imageProcessor(image, product);
-        product.setImage(img);
+        var product = service.createProduct(data, image);
         repository.save(product);
         var uri = uriBuilder.path("/api/v1/products").buildAndExpand(product.getId()).toUri();
         return ResponseEntity.created(uri).body(new ApiResponse(true, new ReturnProductCreationData(product)));
@@ -53,6 +45,7 @@ public class ProductController {
         }
         return ResponseEntity.ok(new ApiResponse(true, page));
     }
+
     @GetMapping("{id}")
     public ResponseEntity<ApiResponse> getProduct(@PathVariable Long id) {
         var product = repository.getReferenceById(id);

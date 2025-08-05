@@ -69,7 +69,7 @@ public class Product {
     List<Tag> tags;
 
     @Column(name = "product_active")
-    boolean active;
+    Boolean active;
 
     @Column(name = "product_create_at")
     LocalDateTime createdTime;
@@ -84,7 +84,7 @@ public class Product {
         return active;
     }
 
-    public Product(CreateProductData data) {
+    public Product(CreateProductData data, Category category, List<Ingredient> ingredients, List<Tag> tags) {
         name = data.nome();
         slug = data.nome().replace(" ", "-").toLowerCase();
         price = data.preco();
@@ -94,6 +94,14 @@ public class Product {
         howToUse = data.modoUso();
         active = data.ativo();
         createdTime = LocalDateTime.now(zone);
+        this.category = category;
+        ingredientList = ingredients;
+        this.tags = tags;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+        slug = name.replace(" ", "-").toLowerCase();
     }
 
 }

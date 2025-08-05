@@ -1,8 +1,9 @@
 package com.wiily.pscosmeticos.PsAPI.service;
 
-import com.wiily.pscosmeticos.PsAPI.domain.category.Category;
 import com.wiily.pscosmeticos.PsAPI.domain.category.CategoryRepository;
+import com.wiily.pscosmeticos.PsAPI.domain.exception.CategoryNotExist;
 import com.wiily.pscosmeticos.PsAPI.domain.product.*;
+import com.wiily.pscosmeticos.PsAPI.domain.product.editProductClasses.EditProduct;
 import com.wiily.pscosmeticos.PsAPI.infra.config.AppProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ProductService {
@@ -28,38 +29,24 @@ public class ProductService {
     AppProperties properties;
     @Autowired
     ImageService imageService;
+    @Autowired
+    List<EditProduct> edit;
 
-    public Product createProduct(CreateProductData data) {
-        var product = new Product(data);
-        Optional<Category> category = categoryRepository.findById((long) data.categoria());
-        if (category.isEmpty()) {
-            return null;
+    public Product createProduct(CreateProductData data, MultipartFile image) {
+        if (!categoryRepository.existsById((long) data.categoria())) {
+            throw new CategoryNotExist("The category id '" + data.categoria() + "' do not exist!");
         }
-        product.setIngredientList(ingredientService.createIngredients(data.ingredientes()));
-        product.setTags(tagService.createTags(data.tags()));
-        product.setCategory(category.get());
+        var category = categoryRepository.getReferenceById((long) data.categoria());
+        var ingredients = ingredientService.createIngredients(data.ingredientes());
+        var tags = tagService.createTags(data.tags());
+        var product = new Product(data, category, ingredients, tags);
+        var img = imageService.imageProcessor(image, product);
+        product.setImage(img);
         return product;
     }
 
     public Product editProduct(CreateProductData data, Product p) {
-        if (data.nome() != null ) {
-            p.setName(data.nome());
-            p.setSlug(data.nome().replace(" ", "-").toLowerCase());
-        }
-        if (data.categoria() != 0){
-            var category = categoryRepository.getReferenceById((long) data.categoria());
-            p.setCategory(category);
-        }
-        if (data.preco() != 0.0f) { p.setPrice(data.preco());}
-        if (data.precoDesconto() != 0.0f) { p.setDiscountPrice(data.precoDesconto());}
-        if (data.descricao() != null) { p.setDescription(data.descricao()); }
-        if (data.descricaoCompleta() != null) {p.setCompleteDescription(data.descricaoCompleta()); }
-        if (!data.ingredientes().isEmpty()) {
-            p.setIngredientList(ingredientService.createIngredients(data.ingredientes()));
-        }
-        if (data.modoUso() != null) { p.setHowToUse(data.modoUso());}
-        if (!data.tags().isEmpty()) { p.setTags(tagService.createTags(data.tags()));}
-        if (data.ativo() != p.getActive()) { p.setActive(data.ativo()); }
+        edit.forEach(ep -> ep.edit(p, data));
         p.setUpdateTime(LocalDateTime.now(p.getZone()));
         repository.save(p);
         return p;
@@ -75,5 +62,4 @@ public class ProductService {
             throw new RuntimeException(e);
         }
     }
-
 }

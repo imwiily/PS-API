@@ -1,8 +1,10 @@
 package com.wiily.pscosmeticos.PsAPI.controller;
 
 import com.wiily.pscosmeticos.PsAPI.domain.category.*;
+import com.wiily.pscosmeticos.PsAPI.domain.exception.ImageIsNull;
 import com.wiily.pscosmeticos.PsAPI.domain.returns.ApiResponse;
 import com.wiily.pscosmeticos.PsAPI.infra.config.AppProperties;
+import com.wiily.pscosmeticos.PsAPI.service.CategoryService;
 import com.wiily.pscosmeticos.PsAPI.service.ImageService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,8 @@ public class CategoryController {
     AppProperties properties;
     @Autowired
     ImageService imageService;
+    @Autowired
+    CategoryService service;
 
     @GetMapping
     public ResponseEntity<Page<ReturnCategoryData>> getCategories(@PageableDefault(size = 12) Pageable pageable) {
@@ -40,12 +44,9 @@ public class CategoryController {
     public ResponseEntity<Object> createCategory(@RequestPart(name = "dados") @Valid CreateCategoryData categoryData,
                                                  @RequestPart(name = "imagem") MultipartFile image,
                                                  UriComponentsBuilder uriBuilder) {
-        if (image.isEmpty()) {
-            return ResponseEntity.badRequest().body("Image file is empty");
-        }
+        if (image.isEmpty()) throw new ImageIsNull("The image sent to the API doesn't exist");
         var category = new Category(categoryData);
-        String imageName = imageService.imageProcessor(image, category);
-        category.setImageUrl(imageName);
+        category.setImageUrl(imageService.imageProcessor(image, category));
         repository.save(category);
         var uri = uriBuilder.path("/api/v1/categorias").buildAndExpand(category.getId()).toUri();
         return ResponseEntity.created(uri).body(new ApiResponse(true, new ReturnCategoryCreationData(category)));
@@ -55,10 +56,17 @@ public class CategoryController {
     @Transactional
     public ResponseEntity<Object> deleteCategory(@PathVariable Long id) throws IOException {
         var category = repository.getReferenceById(id);
-        String path = properties.getStorage().getImageCategoryRoot() + imageService.getImagePath(category);
-        Files.delete(Path.of(path));
+        Files.delete(Path.of(properties.getStorage().getImageCategoryRoot() + imageService.getImagePath(category)));
         repository.delete(category);
         return ResponseEntity.ok().body(new ApiResponse(true, null));
+    }
+
+    @PutMapping
+    @Transactional
+    public ResponseEntity<Object> editCategory(@RequestPart(name = "dados") @Valid EditCategoryData categoryData,
+                                               @RequestPart(name = "imagem") MultipartFile image) {
+        service.editCategory(categoryData, image);
+        return ResponseEntity.ok().body(new ApiResponse(true, "Category edit with success"));
     }
 
 

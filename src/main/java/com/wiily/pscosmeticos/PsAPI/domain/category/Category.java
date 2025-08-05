@@ -42,15 +42,19 @@ public class Category {
     int totalProdutos;
 
     @Column(name = "category_active")
-    boolean ativo;
+    Boolean ativo;
 
     public Category(@Valid CreateCategoryData categoryData) {
-
         nome = categoryData.nome();
         slug = createSlug(categoryData.nome());
         descricao = categoryData.descricao();
         totalProdutos = 0;
         ativo = categoryData.ativo();
+    }
+
+    public void setNome(String name) {
+        nome = name;
+        slug = createSlug(nome);
     }
 
     private String createSlug(@NotBlank String nome) {
