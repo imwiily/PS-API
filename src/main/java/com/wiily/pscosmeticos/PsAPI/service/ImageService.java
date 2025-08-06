@@ -4,16 +4,16 @@ import com.wiily.pscosmeticos.PsAPI.domain.category.Category;
 import com.wiily.pscosmeticos.PsAPI.domain.exception.ImageIsNull;
 import com.wiily.pscosmeticos.PsAPI.domain.product.Product;
 import com.wiily.pscosmeticos.PsAPI.infra.config.AppProperties;
+import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
 
 @Service
 public class ImageService {
@@ -21,30 +21,41 @@ public class ImageService {
     AppProperties properties;
 
     // Saves and return the image URL.
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     public String imageProcessor(MultipartFile image, Object object) {
         if (image.isEmpty()) throw new ImageIsNull("The image sent to the API doesn't exist");
         var objectInfo = objectType(object);
-        var fileLocation = objectInfo.getLast();
+        String imageName = objectInfo.getFirst() + "-" + objectInfo.get(1) + ".png";
         try {
-            String imageName = objectInfo.getFirst() + "-" + UUID.randomUUID() + Objects.requireNonNull(image.getContentType()).replace("image/", ".");
-            File imageFolder = new File(fileLocation);
-            if (!imageFolder.exists()) imageFolder.mkdirs();
-            image.transferTo(new File(fileLocation, imageName));
-            return properties.getApi().getDomainIp() + "/api/v1/image/" + imageName;
+            saveImage(image, objectInfo.getLast(), imageName);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        return properties.getApi().getDomainIp() + "/api/v1/image/" + imageName;
     }
+
+    private void saveImage(MultipartFile image, String fileLocation, String imageName) throws IOException {
+        File imageFolder = new File(fileLocation);
+        if (!imageFolder.exists()) imageFolder.mkdirs();
+        File file = new File(fileLocation + imageName);
+        ImageIO.scanForPlugins();
+        Thumbnails.of(image.getInputStream())
+                .scale(1.0)
+                .outputFormat("png")
+                .toFile(file);
+
+    }
+
 
     private List<String> objectType(Object object) {
         List<String> list = new ArrayList<>();
         switch (object) {
             case Category c -> {
+                list.add(c.getClass().getSimpleName());
                 list.add(c.getSlug());
                 list.add(properties.getStorage().getImageCategoryRoot());
             }
             case Product p -> {
+                list.add(p.getClass().getSimpleName());
                 list.add(p.getSlug());
                 list.add(properties.getStorage().getImageProductRoot());
             }

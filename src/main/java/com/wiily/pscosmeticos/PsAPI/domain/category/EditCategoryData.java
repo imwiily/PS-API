@@ -1,10 +1,10 @@
 package com.wiily.pscosmeticos.PsAPI.domain.category;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public record EditCategoryData(
-        @NotBlank
-        Long id,
+        @NotNull
+        long id,
         String nome,
         String descricao,
         Boolean ativo

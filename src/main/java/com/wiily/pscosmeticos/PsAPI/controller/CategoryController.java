@@ -2,6 +2,7 @@ package com.wiily.pscosmeticos.PsAPI.controller;
 
 import com.wiily.pscosmeticos.PsAPI.domain.category.*;
 import com.wiily.pscosmeticos.PsAPI.domain.exception.ImageIsNull;
+import com.wiily.pscosmeticos.PsAPI.domain.product.ProductRepository;
 import com.wiily.pscosmeticos.PsAPI.domain.returns.ApiResponse;
 import com.wiily.pscosmeticos.PsAPI.infra.config.AppProperties;
 import com.wiily.pscosmeticos.PsAPI.service.CategoryService;
@@ -32,6 +33,8 @@ public class CategoryController {
     ImageService imageService;
     @Autowired
     CategoryService service;
+    @Autowired
+    ProductRepository productRepository;
 
     @GetMapping
     public ResponseEntity<Page<ReturnCategoryData>> getCategories(@PageableDefault(size = 12) Pageable pageable) {
@@ -56,6 +59,8 @@ public class CategoryController {
     @Transactional
     public ResponseEntity<Object> deleteCategory(@PathVariable Long id) throws IOException {
         var category = repository.getReferenceById(id);
+        var products = productRepository.findByCategory(category);
+        if (!products.isEmpty()) return ResponseEntity.badRequest().body(new ApiResponse(false, "C.ITDx0001", "The category has products inside!"));
         Files.delete(Path.of(properties.getStorage().getImageCategoryRoot() + imageService.getImagePath(category)));
         repository.delete(category);
         return ResponseEntity.ok().body(new ApiResponse(true, null));
@@ -64,7 +69,7 @@ public class CategoryController {
     @PutMapping
     @Transactional
     public ResponseEntity<Object> editCategory(@RequestPart(name = "dados") @Valid EditCategoryData categoryData,
-                                               @RequestPart(name = "imagem") MultipartFile image) {
+                                               @RequestPart(name = "imagem", required = false) MultipartFile image) {
         service.editCategory(categoryData, image);
         return ResponseEntity.ok().body(new ApiResponse(true, "Category edit with success"));
     }

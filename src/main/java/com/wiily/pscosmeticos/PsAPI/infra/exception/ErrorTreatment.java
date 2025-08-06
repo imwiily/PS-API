@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
-import java.util.Arrays;
-
 @RestControllerAdvice
 public class ErrorTreatment {
 
@@ -21,8 +19,7 @@ public class ErrorTreatment {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> genericError(Exception e) {
-        System.out.println(e.getClass() + " : " + e.getMessage());
-        System.out.println(Arrays.toString(e.getStackTrace()));
+        e.printStackTrace();
         return ResponseEntity.internalServerError().body(new ApiResponse(false, e.getMessage()));
     }
 

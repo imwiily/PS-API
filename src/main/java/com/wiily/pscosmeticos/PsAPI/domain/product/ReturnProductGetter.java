@@ -1,5 +1,7 @@
 package com.wiily.pscosmeticos.PsAPI.domain.product;
 
+import com.wiily.pscosmeticos.PsAPI.domain.category.Category;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -7,7 +9,7 @@ public record ReturnProductGetter(Long id,
                                   String name,
                                   String slug,
                                   String imageURL,
-                                  String category,
+                                  CategoryRecord category,
                                   double price,
                                   double discountPrice,
                                   String description,
@@ -24,7 +26,7 @@ public record ReturnProductGetter(Long id,
                 p.getName(),
                 p.getSlug(),
                 p.getImage(),
-                p.getCategory().getNome(),
+                new CategoryRecord(p.getCategory()),
                 p.getPrice(),
                 p.getDiscountPrice(),
                 p.getDescription(),
@@ -38,3 +40,12 @@ public record ReturnProductGetter(Long id,
         );
     }
 }
+record CategoryRecord(long id,
+                      String name) {
+     CategoryRecord(Category c) {
+        this(
+                c.getId(),
+                c.getNome());
+    }
+}
+
