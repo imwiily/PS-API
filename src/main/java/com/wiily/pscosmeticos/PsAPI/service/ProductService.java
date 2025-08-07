@@ -4,6 +4,7 @@ import com.wiily.pscosmeticos.PsAPI.domain.category.CategoryRepository;
 import com.wiily.pscosmeticos.PsAPI.domain.exception.CategoryNotExist;
 import com.wiily.pscosmeticos.PsAPI.domain.product.*;
 import com.wiily.pscosmeticos.PsAPI.domain.product.editProductClasses.EditProduct;
+import com.wiily.pscosmeticos.PsAPI.domain.subcategory.SubCategoryRepository;
 import com.wiily.pscosmeticos.PsAPI.infra.config.AppProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,15 +32,19 @@ public class ProductService {
     ImageService imageService;
     @Autowired
     List<EditProduct> edit;
+    @Autowired
+    SubCategoryRepository subCategoryRepository;
 
     public Product createProduct(CreateProductData data, MultipartFile image) {
         if (!categoryRepository.existsById((long) data.categoria())) {
             throw new CategoryNotExist("The category id '" + data.categoria() + "' do not exist!");
         }
         var category = categoryRepository.getReferenceById((long) data.categoria());
+        var sub_category = subCategoryRepository.subCategoryFindByCategory(category, data.sub_categoria());
+        if (sub_category.isEmpty()) throw new RuntimeException("Sub categoria nao percente a categoria!");
         var ingredients = ingredientService.createIngredients(data.ingredientes());
         var tags = tagService.createTags(data.tags());
-        var product = new Product(data, category, ingredients, tags);
+        var product = new Product(data, category, ingredients, tags, sub_category.get());
         var img = imageService.imageProcessor(image, product);
         product.setImage(img);
         return product;

@@ -5,6 +5,7 @@ import java.util.List;
 public record CreateProductData(
         String nome,
         int categoria,
+        int sub_categoria,
         double preco,
         double precoDesconto,
         String descricao,

@@ -1,6 +1,7 @@
 package com.wiily.pscosmeticos.PsAPI.domain.product;
 
 import com.wiily.pscosmeticos.PsAPI.domain.category.Category;
+import com.wiily.pscosmeticos.PsAPI.domain.subcategory.SubCategory;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -36,6 +37,10 @@ public class Product {
     @JoinColumn(name = "product_category")
     @ManyToOne
     Category category;
+
+    @JoinColumn(name = "product_sub_category")
+    @ManyToOne
+    SubCategory subCategory;
 
     @Column(name = "product_price")
     double price;
@@ -84,7 +89,7 @@ public class Product {
         return active;
     }
 
-    public Product(CreateProductData data, Category category, List<Ingredient> ingredients, List<Tag> tags) {
+    public Product(CreateProductData data, Category category, List<Ingredient> ingredients, List<Tag> tags, SubCategory subCategory) {
         name = data.nome();
         slug = data.nome().replace(" ", "-").toLowerCase();
         price = data.preco();
@@ -95,6 +100,7 @@ public class Product {
         active = data.ativo();
         createdTime = LocalDateTime.now(zone);
         this.category = category;
+        this.subCategory = subCategory;
         ingredientList = ingredients;
         this.tags = tags;
     }

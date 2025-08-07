@@ -20,11 +20,19 @@ CREATE TABLE ingredients (
     ingredient_name VARCHAR(50)
 );
 
+CREATE TABLE sub_categories (
+    sub_category_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    sub_category_name VARCHAR(50),
+    sub_category_category_id INT,
+    FOREIGN KEY (sub_category_category_id) REFERENCES categories(category_id)
+);
+
 CREATE TABLE products (
     product_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    product_name VARCHAR(500) NOT NULL,
+    product_name VARCHAR(100) NOT NULL,
     product_category INT,
-    product_slug VARCHAR(300) NOT NULL,
+    product_sub_category INT,
+    product_slug VARCHAR(100) NOT NULL,
     product_image VARCHAR(300) NOT NULL,
     product_price DECIMAL NOT NULL,
     product_discount_price DECIMAL NOT NULL,
@@ -34,8 +42,12 @@ CREATE TABLE products (
     product_active BOOL NOT NULL,
     product_create_at TIMESTAMP,
     product_update_at TIMESTAMP,
-    FOREIGN KEY (product_category) REFERENCES categories(category_id)
+    FOREIGN KEY (product_category) REFERENCES categories(category_id),
+    FOREIGN KEY (product_sub_category) REFERENCES sub_categories(sub_category_id)
 );
+
+
+
 CREATE TABLE tags (
     tag_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     tag_name VARCHAR(50)

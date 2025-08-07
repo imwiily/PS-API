@@ -1,6 +1,7 @@
 package com.wiily.pscosmeticos.PsAPI.domain.category;
 
 import com.wiily.pscosmeticos.PsAPI.domain.product.Product;
+import com.wiily.pscosmeticos.PsAPI.domain.subcategory.SubCategory;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -37,6 +38,9 @@ public class Category {
 
     @OneToMany(mappedBy = "category")
     List<Product> products;
+
+    @OneToMany(mappedBy = "category")
+    List<SubCategory> subCategories;
 
     @Column(name = "category_total_products")
     int totalProdutos;

@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ImageService {
@@ -24,7 +25,7 @@ public class ImageService {
     public String imageProcessor(MultipartFile image, Object object) {
         if (image.isEmpty()) throw new ImageIsNull("The image sent to the API doesn't exist");
         var objectInfo = objectType(object);
-        String imageName = objectInfo.getFirst() + "-" + objectInfo.get(1) + ".png";
+        String imageName = objectInfo.getFirst() + "-" + objectInfo.get(1) + UUID.randomUUID() + ".webp";
         try {
             saveImage(image, objectInfo.getLast(), imageName);
         } catch (IOException e) {
@@ -35,12 +36,14 @@ public class ImageService {
 
     private void saveImage(MultipartFile image, String fileLocation, String imageName) throws IOException {
         File imageFolder = new File(fileLocation);
-        if (!imageFolder.exists()) imageFolder.mkdirs();
+        if (!imageFolder.exists()) {
+             imageFolder.mkdirs();
+        }
         File file = new File(fileLocation + imageName);
         ImageIO.scanForPlugins();
         Thumbnails.of(image.getInputStream())
                 .scale(1.0)
-                .outputFormat("png")
+                .outputFormat("webp")
                 .toFile(file);
 
     }
