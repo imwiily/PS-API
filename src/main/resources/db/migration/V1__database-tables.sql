@@ -1,3 +1,5 @@
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
+
 CREATE TABLE categories (
     category_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     category_name VARCHAR(200) NOT NULL,
@@ -30,6 +32,7 @@ CREATE TABLE sub_categories (
 CREATE TABLE products (
     product_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     product_name VARCHAR(100) NOT NULL,
+    product_type VARCHAR(20),
     product_category INT,
     product_sub_category INT,
     product_slug VARCHAR(100) NOT NULL,
@@ -46,6 +49,16 @@ CREATE TABLE products (
     FOREIGN KEY (product_sub_category) REFERENCES sub_categories(sub_category_id)
 );
 
+CREATE TABLE product_attributes (
+  product_id   INT NOT NULL,
+  attr_key     VARCHAR(255) NOT NULL,
+  attr_value   VARCHAR(2000),
+  PRIMARY KEY (product_id, attr_key),
+  CONSTRAINT fk_product_attrs_product
+    FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE
+);
+CREATE INDEX idx_product_attrs_key ON product_attributes (attr_key);
+CREATE INDEX idx_product_attrs_val_gin ON product_attributes USING gin (attr_value gin_trgm_ops); -- opcional (extensão pg_trgm)
 
 
 CREATE TABLE tags (

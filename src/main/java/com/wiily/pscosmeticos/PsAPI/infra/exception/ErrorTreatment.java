@@ -3,6 +3,8 @@ package com.wiily.pscosmeticos.PsAPI.infra.exception;
 import com.wiily.pscosmeticos.PsAPI.infra.exception.exceptions.CategoryNotExist;
 import com.wiily.pscosmeticos.PsAPI.infra.exception.exceptions.ImageIsNull;
 import com.wiily.pscosmeticos.PsAPI.domain.ApiResponse;
+import com.wiily.pscosmeticos.PsAPI.infra.exception.exceptions.ProductTypeNotExists;
+import com.wiily.pscosmeticos.PsAPI.infra.exception.exceptions.SubCategoryNotBelongToCategory;
 import jakarta.persistence.EntityNotFoundException;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.http.ResponseEntity;
@@ -60,6 +62,22 @@ public class ErrorTreatment {
                         "Request Parameter '" + s + "' is missing!"
                 )
         );
+    }
+    @ExceptionHandler(SubCategoryNotBelongToCategory.class)
+    public ResponseEntity<ApiResponse> subCategontNotBelong(SubCategoryNotBelongToCategory e) {
+        return ResponseEntity.badRequest().body(
+                new ApiResponse(
+                        false,
+                        e.getMessage()
+                )
+        );
+    }
+    @ExceptionHandler(ProductTypeNotExists.class)
+    public ResponseEntity<ApiResponse> productTypeNotExist(ProductTypeNotExists e) {
+        return ResponseEntity.badRequest().body(new ApiResponse(
+                false,
+                e.getMessage()
+        ));
     }
 
 

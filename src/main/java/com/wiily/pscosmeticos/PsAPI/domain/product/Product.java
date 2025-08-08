@@ -14,6 +14,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Table(name = "products")
@@ -30,6 +31,9 @@ public class Product {
 
     @Column(name = "product_name")
     String name;
+
+    @Column(name = "product_type")
+    PRODUCT_TYPE type;
 
     @Column(name = "product_slug")
     String slug;
@@ -50,6 +54,15 @@ public class Product {
 
     @Column(name = "product_discount_price")
     double discountPrice;
+
+    @ElementCollection
+    @CollectionTable(
+            name = "product_attributes",
+            joinColumns = @JoinColumn(name = "product_id")
+    )
+    @MapKeyColumn(name = "attr_key")
+    @Column(name = "attr_value")
+    Map<String, String> multiColor;
 
     @Column(name = "product_description")
     String description;
@@ -88,11 +101,13 @@ public class Product {
     @Transient
     ZoneId zone = ZoneId.of("America/Sao_Paulo");
 
-    public boolean getActive() {
-        return active;
-    }
-
-    public Product(CreateProductData data, Category category, List<Ingredient> ingredients, List<Tag> tags, SubCategory subCategory) {
+    public Product(CreateProductData data,
+                   Category category,
+                   List<Ingredient> ingredients,
+                   List<Tag> tags,
+                   SubCategory subCategory,
+                   PRODUCT_TYPE type,
+                   Map<String, String> map) {
         name = data.nome();
         slug = data.nome().replace(" ", "-").toLowerCase();
         price = data.preco();
@@ -106,6 +121,10 @@ public class Product {
         this.subCategory = subCategory;
         ingredientList = ingredients;
         this.tags = tags;
+        this.type = type;
+        if (!map.isEmpty()) {
+            multiColor = map;
+        }
     }
 
     public void setName(String name) {
