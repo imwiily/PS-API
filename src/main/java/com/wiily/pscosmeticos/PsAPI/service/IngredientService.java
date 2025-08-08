@@ -1,7 +1,7 @@
 package com.wiily.pscosmeticos.PsAPI.service;
 
-import com.wiily.pscosmeticos.PsAPI.domain.product.Ingredient;
-import com.wiily.pscosmeticos.PsAPI.domain.product.IngredientRepository;
+import com.wiily.pscosmeticos.PsAPI.domain.product.ingredient.Ingredient;
+import com.wiily.pscosmeticos.PsAPI.domain.product.ingredient.IngredientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

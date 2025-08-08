@@ -1,9 +1,10 @@
 package com.wiily.pscosmeticos.PsAPI.service;
 
 import com.wiily.pscosmeticos.PsAPI.domain.category.CategoryRepository;
-import com.wiily.pscosmeticos.PsAPI.domain.exception.CategoryNotExist;
+import com.wiily.pscosmeticos.PsAPI.infra.exception.exceptions.CategoryNotExist;
 import com.wiily.pscosmeticos.PsAPI.domain.product.*;
 import com.wiily.pscosmeticos.PsAPI.domain.product.editProductClasses.EditProduct;
+import com.wiily.pscosmeticos.PsAPI.domain.product.dto.datas.CreateProductData;
 import com.wiily.pscosmeticos.PsAPI.domain.subcategory.SubCategoryRepository;
 import com.wiily.pscosmeticos.PsAPI.infra.config.AppProperties;
 import org.springframework.beans.factory.annotation.Autowired;

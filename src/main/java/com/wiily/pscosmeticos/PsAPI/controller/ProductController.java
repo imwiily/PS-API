@@ -1,7 +1,10 @@
 package com.wiily.pscosmeticos.PsAPI.controller;
 
 import com.wiily.pscosmeticos.PsAPI.domain.product.*;
-import com.wiily.pscosmeticos.PsAPI.domain.returns.ApiResponse;
+import com.wiily.pscosmeticos.PsAPI.domain.product.dto.datas.CreateProductData;
+import com.wiily.pscosmeticos.PsAPI.domain.product.dto.returns.ReturnProductCreationData;
+import com.wiily.pscosmeticos.PsAPI.domain.product.dto.returns.ReturnProductGetter;
+import com.wiily.pscosmeticos.PsAPI.domain.ApiResponse;
 import com.wiily.pscosmeticos.PsAPI.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

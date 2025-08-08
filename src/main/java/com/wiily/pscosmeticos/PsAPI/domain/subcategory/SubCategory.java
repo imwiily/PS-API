@@ -2,6 +2,7 @@ package com.wiily.pscosmeticos.PsAPI.domain.subcategory;
 
 import com.wiily.pscosmeticos.PsAPI.domain.category.Category;
 import com.wiily.pscosmeticos.PsAPI.domain.product.Product;
+import com.wiily.pscosmeticos.PsAPI.domain.subcategory.dto.datas.CreateSubCategoryData;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

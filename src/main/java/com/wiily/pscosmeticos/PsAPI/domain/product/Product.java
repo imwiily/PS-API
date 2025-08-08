@@ -1,6 +1,9 @@
 package com.wiily.pscosmeticos.PsAPI.domain.product;
 
 import com.wiily.pscosmeticos.PsAPI.domain.category.Category;
+import com.wiily.pscosmeticos.PsAPI.domain.product.ingredient.Ingredient;
+import com.wiily.pscosmeticos.PsAPI.domain.product.dto.datas.CreateProductData;
+import com.wiily.pscosmeticos.PsAPI.domain.product.tag.Tag;
 import com.wiily.pscosmeticos.PsAPI.domain.subcategory.SubCategory;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

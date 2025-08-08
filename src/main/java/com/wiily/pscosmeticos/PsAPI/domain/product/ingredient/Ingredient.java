@@ -1,4 +1,4 @@
-package com.wiily.pscosmeticos.PsAPI.domain.product;
+package com.wiily.pscosmeticos.PsAPI.domain.product.ingredient;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,26 +7,26 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name =  "tags")
+@Table(name =  "ingredients")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Tag {
+public class Ingredient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "tag_id")
+    @Column(name = "ingredient_id")
     Long id;
 
-    @Column(name = "tag_name")
-    String name;
+    @Column(name = "ingredient_name")
+    String ingredient;
 
-    public Tag(String tag) {
-        name = tag;
+    public Ingredient(String ingredientName) {
+        ingredient = ingredientName;
     }
 
     @Override
     public String toString() {
-        return name;
+        return ingredient;
     }
 }

@@ -1,4 +1,4 @@
-package com.wiily.pscosmeticos.PsAPI.domain.subcategory;
+package com.wiily.pscosmeticos.PsAPI.domain.subcategory.dto.datas;
 
 public record CreateSubCategoryData(
         String name,

@@ -1,16 +1,19 @@
 package com.wiily.pscosmeticos.PsAPI.infra.exception;
 
-import com.wiily.pscosmeticos.PsAPI.domain.exception.CategoryNotExist;
-import com.wiily.pscosmeticos.PsAPI.domain.exception.ImageIsNull;
-import com.wiily.pscosmeticos.PsAPI.domain.returns.ApiResponse;
+import com.wiily.pscosmeticos.PsAPI.infra.exception.exceptions.CategoryNotExist;
+import com.wiily.pscosmeticos.PsAPI.infra.exception.exceptions.ImageIsNull;
+import com.wiily.pscosmeticos.PsAPI.domain.ApiResponse;
 import jakarta.persistence.EntityNotFoundException;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
+
+import java.util.Arrays;
 
 @RestControllerAdvice
 public class ErrorTreatment {
@@ -19,7 +22,7 @@ public class ErrorTreatment {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> genericError(Exception e) {
-        e.printStackTrace();
+        System.out.println(Arrays.toString(e.getStackTrace()));
         return ResponseEntity.internalServerError().body(new ApiResponse(false, e.getMessage()));
     }
 
@@ -47,6 +50,17 @@ public class ErrorTreatment {
         String s = String.valueOf(e.getBody());
         return ResponseEntity.badRequest().body(e.getRequestPartName() + " " + s);
     }
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<ApiResponse> missingRequestParameter(MissingServletRequestParameterException e) {
+        var s = e.getParameterName();
+        return ResponseEntity.badRequest().body(
+                new ApiResponse(
+                        false,
+                        "RP.MISS",
+                        "Request Parameter '" + s + "' is missing!"
+                )
+        );
+    }
 
 
     private record InvalidArgument(String camp, String desc) {
@@ -54,7 +68,7 @@ public class ErrorTreatment {
             this(error.getField(), error.getDefaultMessage());
         }
     }
-//    private record MissingRequestPartField(String camp, String idnt) {
+//    private dto MissingRequestPartField(String camp, String idnt) {
 //        public MissingRequestPartField()
 //    }
 

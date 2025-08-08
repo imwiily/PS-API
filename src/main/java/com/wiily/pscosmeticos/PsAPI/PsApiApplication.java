@@ -10,6 +10,11 @@ public class PsApiApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(PsApiApplication.class, args);
+		System.out.println("""
+				=======================================
+				--------- Application Started ---------
+				=======================================
+				""");
 	}
 
 }

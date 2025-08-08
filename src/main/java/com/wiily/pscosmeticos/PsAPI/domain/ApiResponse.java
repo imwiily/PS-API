@@ -1,4 +1,4 @@
-package com.wiily.pscosmeticos.PsAPI.domain.returns;
+package com.wiily.pscosmeticos.PsAPI.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 

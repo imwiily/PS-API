@@ -1,4 +1,4 @@
-package com.wiily.pscosmeticos.PsAPI.domain.category;
+package com.wiily.pscosmeticos.PsAPI.domain.category.dto.datas;
 
 import jakarta.validation.constraints.NotNull;
 

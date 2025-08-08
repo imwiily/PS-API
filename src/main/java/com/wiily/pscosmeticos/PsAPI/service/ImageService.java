@@ -1,7 +1,7 @@
 package com.wiily.pscosmeticos.PsAPI.service;
 
 import com.wiily.pscosmeticos.PsAPI.domain.category.Category;
-import com.wiily.pscosmeticos.PsAPI.domain.exception.ImageIsNull;
+import com.wiily.pscosmeticos.PsAPI.infra.exception.exceptions.ImageIsNull;
 import com.wiily.pscosmeticos.PsAPI.domain.product.Product;
 import com.wiily.pscosmeticos.PsAPI.infra.config.AppProperties;
 import net.coobird.thumbnailator.Thumbnails;
@@ -36,9 +36,7 @@ public class ImageService {
 
     private void saveImage(MultipartFile image, String fileLocation, String imageName) throws IOException {
         File imageFolder = new File(fileLocation);
-        if (!imageFolder.exists()) {
-             imageFolder.mkdirs();
-        }
+        if (!imageFolder.exists()) imageFolder.mkdirs();
         File file = new File(fileLocation + imageName);
         ImageIO.scanForPlugins();
         Thumbnails.of(image.getInputStream())

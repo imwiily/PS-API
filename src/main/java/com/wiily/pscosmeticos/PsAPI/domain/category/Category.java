@@ -1,5 +1,6 @@
 package com.wiily.pscosmeticos.PsAPI.domain.category;
 
+import com.wiily.pscosmeticos.PsAPI.domain.category.dto.datas.CreateCategoryData;
 import com.wiily.pscosmeticos.PsAPI.domain.product.Product;
 import com.wiily.pscosmeticos.PsAPI.domain.subcategory.SubCategory;
 import jakarta.persistence.*;

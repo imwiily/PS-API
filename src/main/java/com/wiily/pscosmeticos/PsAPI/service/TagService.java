@@ -1,7 +1,7 @@
 package com.wiily.pscosmeticos.PsAPI.service;
 
-import com.wiily.pscosmeticos.PsAPI.domain.product.Tag;
-import com.wiily.pscosmeticos.PsAPI.domain.product.TagRepository;
+import com.wiily.pscosmeticos.PsAPI.domain.product.tag.Tag;
+import com.wiily.pscosmeticos.PsAPI.domain.product.tag.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

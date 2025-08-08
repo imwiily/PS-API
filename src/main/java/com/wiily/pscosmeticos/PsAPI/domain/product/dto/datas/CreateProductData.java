@@ -1,4 +1,4 @@
-package com.wiily.pscosmeticos.PsAPI.domain.product;
+package com.wiily.pscosmeticos.PsAPI.domain.product.dto.datas;
 
 import java.util.List;
 

@@ -1,6 +1,9 @@
-package com.wiily.pscosmeticos.PsAPI.domain.product;
+package com.wiily.pscosmeticos.PsAPI.domain.product.dto.returns;
 
 import com.wiily.pscosmeticos.PsAPI.domain.category.Category;
+import com.wiily.pscosmeticos.PsAPI.domain.product.ingredient.Ingredient;
+import com.wiily.pscosmeticos.PsAPI.domain.product.Product;
+import com.wiily.pscosmeticos.PsAPI.domain.product.tag.Tag;
 
 import java.time.LocalDateTime;
 import java.util.List;

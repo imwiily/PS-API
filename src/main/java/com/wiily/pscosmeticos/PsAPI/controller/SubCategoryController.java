@@ -1,11 +1,10 @@
 package com.wiily.pscosmeticos.PsAPI.controller;
 
 import com.wiily.pscosmeticos.PsAPI.domain.category.CategoryRepository;
-import com.wiily.pscosmeticos.PsAPI.domain.returns.ApiResponse;
-import com.wiily.pscosmeticos.PsAPI.domain.subcategory.SubCategory;
-import com.wiily.pscosmeticos.PsAPI.domain.subcategory.SubCategoryData;
-import com.wiily.pscosmeticos.PsAPI.domain.subcategory.SubCategoryRepository;
-import com.wiily.pscosmeticos.PsAPI.domain.subcategory.CreateSubCategoryData;
+import com.wiily.pscosmeticos.PsAPI.domain.ApiResponse;
+import com.wiily.pscosmeticos.PsAPI.domain.subcategory.*;
+import com.wiily.pscosmeticos.PsAPI.domain.subcategory.dto.datas.CreateSubCategoryData;
+import com.wiily.pscosmeticos.PsAPI.domain.subcategory.dto.returns.ReturnSubCategoryData;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -37,8 +36,8 @@ public class SubCategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<SubCategoryData>> getSubCategories(Pageable pageable) {
-        var page = repository.findAll(pageable).map(SubCategoryData::new);
+    public ResponseEntity<Page<ReturnSubCategoryData>> getSubCategories(Pageable pageable) {
+        var page = repository.findAll(pageable).map(ReturnSubCategoryData::new);
         return ResponseEntity.ok(page);
     }
 

@@ -1,4 +1,4 @@
-package com.wiily.pscosmeticos.PsAPI.domain.exception;
+package com.wiily.pscosmeticos.PsAPI.infra.exception.exceptions;
 
 import lombok.Getter;
 

@@ -1,4 +1,6 @@
-package com.wiily.pscosmeticos.PsAPI.domain.product;
+package com.wiily.pscosmeticos.PsAPI.domain.product.dto.returns;
+
+import com.wiily.pscosmeticos.PsAPI.domain.product.Product;
 
 import java.util.List;
 
@@ -18,20 +20,20 @@ public record ReturnProductCreationData(Long id,
                                         boolean active) {
     public ReturnProductCreationData(Product p) {
         this(
-                p.id,
-                p.name,
-                p.slug,
-                p.image,
-                p.category.getNome(),
-                p.subCategory.getName(),
-                p.price,
-                p.discountPrice,
-                p.description,
-                p.completeDescription,
+                p.getId(),
+                p.getName(),
+                p.getSlug(),
+                p.getImage(),
+                p.getCategory().getNome(),
+                p.getSubCategory().getName(),
+                p.getPrice(),
+                p.getDiscountPrice(),
+                p.getDescription(),
+                p.getCompleteDescription(),
                 p.getIngredientList().stream().map(Object::toString).toList(),
-                p.howToUse,
-                p.tags.stream().map(Object::toString).toList(),
-                p.active
+                p.getHowToUse(),
+                p.getTags().stream().map(Object::toString).toList(),
+                p.getActive()
         );
     }
 }

@@ -1,4 +1,6 @@
-package com.wiily.pscosmeticos.PsAPI.domain.category;
+package com.wiily.pscosmeticos.PsAPI.domain.category.dto.returns;
+
+import com.wiily.pscosmeticos.PsAPI.domain.category.Category;
 
 public record ReturnCategoryCreationData(Long id,
                                          String nome,
@@ -9,13 +11,13 @@ public record ReturnCategoryCreationData(Long id,
                                          Boolean ativo) {
     public ReturnCategoryCreationData(Category category) {
         this(
-                category.id,
-                category.nome,
-                category.slug,
-                category.descricao,
-                category.imageUrl,
-                category.totalProdutos,
-                category.ativo
+                category.getId(),
+                category.getNome(),
+                category.getSlug(),
+                category.getDescricao(),
+                category.getImageUrl(),
+                category.getTotalProdutos(),
+                category.getAtivo()
         );
     }
 }
