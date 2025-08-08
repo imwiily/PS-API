@@ -39,28 +39,30 @@ public class ProductService {
     SubCategoryRepository subCategoryRepository;
 
     public Product createProduct(CreateProductData data, MultipartFile image) {
-        if (!categoryRepository.existsById((long) data.categoria())) {
-            throw new CategoryNotExist("The category id '" + data.categoria() + "' do not exist!");
-        }
         // Get Category from database
-        var category = categoryRepository.getReferenceById((long) data.categoria());
+
+        var category = categoryRepository.findById((long)data.categoria());
+        if (category.isEmpty()) throw new CategoryNotExist("The category id '" + data.categoria() + "' do not exist!");
         // Get Sub Category from database
-        var sub_category = subCategoryRepository.subCategoryFindByCategory(category, data.sub_categoria());
+        var sub_category = subCategoryRepository.subCategoryFindByCategory(category.get(), data.sub_categoria());
         // Check if category is not null, if is, will send a runtime exception.
         if (sub_category.isEmpty()) throw new SubCategoryNotBelongToCategory("Sub-category don't belong to the category.");
-        // Create the ingredients and save it.
-        var ingredients = ingredientService.createIngredients(data.ingredientes());
-        // Create the tags and save it.
-        var tags = tagService.createTags(data.tags());
         // Get the type of the product
         var type = getType(data.tipo());
         // Get color if is Multi Color.
         Map<String, String> map = new HashMap<>();
-        if (type == PRODUCT_TYPE.MULTI_COLOR) {
+        if (type.equals(PRODUCT_TYPE.MULTI_COLOR)) {
             map = data.cores();
         }
         // Create the product with all the information saved.
-        var product = new Product(data, category, ingredients, tags, sub_category.get(), type, map);
+        var product = new Product(
+                data,
+                category.get(),
+                ingredientService.createIngredients(data.ingredientes()),
+                tagService.createTags(data.tags()),
+                sub_category.get(),
+                type,
+                map);
         // Save the image in the root, and return the URL to GET.
         var img = imageService.imageProcessor(image, product);
         // Set image in the product.
