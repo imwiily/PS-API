@@ -6,6 +6,7 @@ import com.wiily.pscosmeticos.PsAPI.domain.category.dto.datas.EditCategoryData;
 import com.wiily.pscosmeticos.PsAPI.domain.category.dto.returns.ReturnCategoryCreationData;
 import com.wiily.pscosmeticos.PsAPI.domain.category.dto.returns.ReturnCategoryData;
 import com.wiily.pscosmeticos.PsAPI.domain.category.dto.returns.ReturnCategoryEditedData;
+import com.wiily.pscosmeticos.PsAPI.domain.subcategory.dto.returns.ReturnSubCategoryData;
 import com.wiily.pscosmeticos.PsAPI.infra.exception.exceptions.ImageIsNull;
 import com.wiily.pscosmeticos.PsAPI.domain.ApiResponse;
 import com.wiily.pscosmeticos.PsAPI.service.CategoryService;
@@ -65,6 +66,13 @@ public class CategoryController {
                                                @RequestPart(name = "imagem", required = false) MultipartFile image) {
         var category = service.editCategory(categoryData, image);
         return ResponseEntity.ok().body(new ApiResponse(true, new ReturnCategoryEditedData(category)));
+    }
+
+    @GetMapping("/subcategorias/{id}")
+    public ResponseEntity<Object> getSubcategories(@PathVariable Long id) {
+        var category = repository.getReferenceById(id);
+        var sub = category.getSubCategories().stream().map(ReturnSubCategoryData::new);
+        return ResponseEntity.ok(new ApiResponse(true, sub));
     }
 
 
