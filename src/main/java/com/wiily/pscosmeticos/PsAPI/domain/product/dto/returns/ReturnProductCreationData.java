@@ -2,9 +2,12 @@ package com.wiily.pscosmeticos.PsAPI.domain.product.dto.returns;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wiily.pscosmeticos.PsAPI.domain.product.Product;
+import com.wiily.pscosmeticos.PsAPI.domain.subcategory.SubCategory;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record ReturnProductCreationData(Long id,
                                         String name,
@@ -30,7 +33,9 @@ public record ReturnProductCreationData(Long id,
                 p.getType().toString(),
                 p.getImage(),
                 p.getCategory().getNome(),
-                p.getSubCategory().getName(),
+                Optional.ofNullable(p.getSubCategory())
+                        .map(SubCategory::getName)
+                        .orElse("Sem subcategoria"),
                 p.getMultiColor(),
                 p.getPrice(),
                 p.getDiscountPrice(),

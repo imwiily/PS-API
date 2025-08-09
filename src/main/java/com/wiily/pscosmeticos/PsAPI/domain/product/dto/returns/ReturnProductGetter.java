@@ -10,6 +10,7 @@ import com.wiily.pscosmeticos.PsAPI.domain.subcategory.SubCategory;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public record ReturnProductGetter(Long id,
@@ -61,12 +62,16 @@ record CategoryRecord(long id,
                 c.getNome());
     }
 }
-record SubCategoryRecord(long id,
+record SubCategoryRecord(Long id,
                          String nome) {
     SubCategoryRecord(SubCategory sc) {
         this(
-                sc.getId(),
-                sc.getName()
+                Optional.ofNullable(sc)
+                        .map(SubCategory::getId)
+                        .orElse(null),
+                Optional.ofNullable(sc)
+                        .map(SubCategory::getName)
+                        .orElse("Sem subcategoria")
         );
     }
 }

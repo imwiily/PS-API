@@ -33,6 +33,7 @@ public class Product {
     String name;
 
     @Column(name = "product_type")
+    @Enumerated(EnumType.STRING)
     PRODUCT_TYPE type;
 
     @Column(name = "product_slug")

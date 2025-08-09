@@ -1,6 +1,7 @@
 package com.wiily.pscosmeticos.PsAPI.service;
 
 import com.wiily.pscosmeticos.PsAPI.domain.category.CategoryRepository;
+import com.wiily.pscosmeticos.PsAPI.domain.subcategory.SubCategory;
 import com.wiily.pscosmeticos.PsAPI.infra.exception.exceptions.CategoryNotExist;
 import com.wiily.pscosmeticos.PsAPI.domain.product.*;
 import com.wiily.pscosmeticos.PsAPI.domain.product.editProductClasses.EditProduct;
@@ -44,9 +45,12 @@ public class ProductService {
         var category = categoryRepository.findById((long)data.categoria());
         if (category.isEmpty()) throw new CategoryNotExist("The category id '" + data.categoria() + "' do not exist!");
         // Get Sub Category from database
-        var sub_category = subCategoryRepository.subCategoryFindByCategory(category.get(), data.sub_categoria());
-        // Check if category is not null, if is, will send a runtime exception.
-        if (sub_category.isEmpty()) throw new SubCategoryNotBelongToCategory("Sub-category don't belong to the category.");
+        Optional<SubCategory> sub_category = Optional.empty();
+        if (data.sub_categoria() != null) {
+            sub_category = subCategoryRepository.subCategoryFindByCategory(category.get(), data.sub_categoria());
+            // Check if sub_category is not null, if is, will send a runtime exception.
+            if (sub_category.isEmpty()) throw new SubCategoryNotBelongToCategory("Sub-category don't belong to the category.");
+        }
         // Get the type of the product
         var type = getType(data.tipo());
         // Get color if is Multi Color.
@@ -60,7 +64,7 @@ public class ProductService {
                 category.get(),
                 ingredientService.createIngredients(data.ingredientes()),
                 tagService.createTags(data.tags()),
-                sub_category.get(),
+                sub_category.orElse(null),
                 type,
                 map);
         // Save the image in the root, and return the URL to GET.

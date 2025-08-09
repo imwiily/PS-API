@@ -13,7 +13,7 @@ public record CreateProductData(
         String tipo,
         @NotNull
         int categoria,
-        int sub_categoria,
+        Integer sub_categoria,
         @NotNull
         double preco,
         double precoDesconto,
